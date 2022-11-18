@@ -233,6 +233,9 @@ class Endereco(models.Model):
     uf = models.CharField(max_length=3, null=True,
                           blank=True, choices=UF_SIGLA)
 
+    def __str__(self):
+        return f'{self.logradouro}, {self.numero}, {self.bairro}, {self.municipio}'
+
 class Telefone(models.Model):
     pessoa_tel = models.ForeignKey(
         Pessoa, related_name="telefone", on_delete=models.CASCADE)
@@ -240,10 +243,16 @@ class Telefone(models.Model):
         max_length=8, choices=TIPO_TELEFONE, null=True, blank=True)
     telefone = models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.telefone
+
 class Email(models.Model):
     pessoa_email = models.ForeignKey(
         Pessoa, related_name="email", on_delete=models.CASCADE)
     email = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.email
 
 class Banco(models.Model):
     pessoa_banco = models.ForeignKey(
@@ -254,8 +263,14 @@ class Banco(models.Model):
     conta = models.CharField(max_length=32, null=True, blank=True)
     digito = models.CharField(max_length=8, null=True, blank=True)
 
+    def __str__(self):
+        return f'{self.banco} - Ag: {self.agencia}-{self.digito}'
+
 class Documento(models.Model):
     pessoa_documento = models.ForeignKey(
         Pessoa, related_name="documento", on_delete=models.CASCADE)
     tipo = models.CharField(max_length=32)
     documento = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.tipo} - {self.documento}'

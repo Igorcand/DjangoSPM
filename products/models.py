@@ -3,14 +3,23 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 
 class Categoria(models.Model):
-    categoria_desc = models.CharField(max_length=32)
+    categoria = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.categoria
 
 class Marca(models.Model):
-    marca_desc = models.CharField(max_length=32)
+    marca = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.marca
 
 class Unidade(models.Model):
     sigla_unidade = models.CharField(max_length=3)
-    unidade_desc = models.CharField(max_length=16)
+    unidade = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.unidade
 
 class Produto(models.Model):
     # Dados gerais
@@ -29,3 +38,6 @@ class Produto(models.Model):
     venda = models.DecimalField(max_digits=16, decimal_places=2, validators=[
                                 MinValueValidator(Decimal('0.00'))], default=Decimal('0.00'))
     inf_adicionais = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.descricao

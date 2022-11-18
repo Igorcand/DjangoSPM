@@ -23,7 +23,11 @@ class Compra(models.Model):
     seguro = models.DecimalField(max_digits=13, decimal_places=2, validators=[
                                  MinValueValidator(Decimal('0.00'))], default=Decimal('0.00'))
     observacoes = models.CharField(max_length=1055, null=True, blank=True)
-    
+
+    def __str__(self):
+        return f'ID:{self.id} - R${self.valor_total}'
+
+
 class ItensCompra(models.Model):
     produto = models.ForeignKey(Produto, related_name="compra_produto",
                                 on_delete=models.CASCADE, null=True, blank=True)
@@ -39,6 +43,9 @@ class ItensCompra(models.Model):
                                    MinValueValidator(Decimal('0.00'))], null=True, blank=True)
     subtotal = models.DecimalField(max_digits=13, decimal_places=2, validators=[
                                    MinValueValidator(Decimal('0.00'))], null=True, blank=True)
+
+    def __str__(self):
+        return self.subtotal
 
 
 
