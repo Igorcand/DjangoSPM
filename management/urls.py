@@ -1,21 +1,25 @@
-"""management URL Configuration
+from ninja import NinjaAPI
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
+from person.routes import router as person_router
+from info.routes import router as info_router
+from products.routes import router as products_router
+from shopping.routes import router as shopping_router
+from payment.routes import router as payment_router
+
+
+
+api = NinjaAPI()
+
+api.add_router("/person/", person_router)
+api.add_router("/info/", info_router)
+api.add_router("/products/", products_router)
+api.add_router("/shopping/", shopping_router)
+api.add_router("/payment/", payment_router)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', api.urls)
 ]
