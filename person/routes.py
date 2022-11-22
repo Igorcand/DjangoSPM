@@ -52,3 +52,33 @@ def create_entity_person(request, requirements: EntityPersonSchema):
     dict_requirements = requirements.dict()
     person = PessoaJuridica.objects.create(**dict_requirements)
     return model_to_dict(person)
+
+@router.put('update_person/', tags=['Person'])
+def update_person(request, person_id: str, requirements: PersonSchema):
+    person = get_object_or_404(Pessoa, id=person_id)
+    for attr, value in requirements.dict().items():
+        setattr(person, attr, value)
+    person.save()
+    return {"success": True}
+
+@router.put('update_physical_person/', tags=['Person'])
+def update_physical_person(request, person_id: str, requirements: PhysicalPersonSchema):
+    person = get_object_or_404(PessoaFisica, pessoa=person_id)
+    for attr, value in requirements.dict().items():
+        setattr(person, attr, value)
+    person.save()
+    return {"success": True}
+
+@router.put('update_entity_person/', tags=['Person'])
+def update_entity_person(request, person_id: str, requirements: EntityPersonSchema):
+    person = get_object_or_404(PessoaJuridica, pessoa=person_id)
+    for attr, value in requirements.dict().items():
+        setattr(person, attr, value)
+    person.save()
+    return {"success": True}
+
+@router.delete('delete_person/', tags=['Person'])
+def delete_person(request, person_id: str):
+    person = get_object_or_404(Pessoa, id=person_id)
+    person.delete()
+    return {"success": True}
