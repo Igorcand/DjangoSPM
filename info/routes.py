@@ -1,7 +1,67 @@
 from ninja import Router
+from django.forms.models import model_to_dict
+from .models import Email, Endereco, Telefone, Banco, Documento
 
 router = Router()
 
-@router.get('info/', tags=['Info'])
-def listar(request):
-    return 'na app info'
+@router.get('list_email/', tags=['Info'])
+def list_emails(request):
+    emails = Email.objects.all()
+    response = [
+        {'id': i.id, 
+        'email': i.email, 
+        } for i in emails]
+    return response
+
+@router.get('list_address/', tags=['Info'])
+def list_address(request):
+    addresses = Endereco.objects.all()
+    response = [
+        {'id': i.id, 
+        'tipo_endereco': i.tipo_endereco, 
+        'logradouro': i.logradouro, 
+        'numero': i.numero, 
+        'bairro': i.bairro, 
+        'complemento': i.complemento, 
+        'pais': i.pais, 
+        'cpais': i.cpais, 
+        'municipio': i.municipio, 
+        'cmun': i.cmun, 
+        'cep': i.cep, 
+        'uf': i.uf, 
+        } for i in addresses]
+    return response
+
+@router.get('list_phones/', tags=['Info'])
+def list_phones(request):
+    phones = Telefone.objects.all()
+    response = [
+        {'id': i.id, 
+        'tipo_telefone': i.tipo_telefone, 
+        'telefone': i.telefone, 
+        } for i in phones]
+    return response
+
+@router.get('list_bank/', tags=['Info'])
+def list_bank(request):
+    banks = Banco.objects.all()
+    response = [
+        {'id': i.id, 
+        'banco': i.banco, 
+        'agencia': i.agencia, 
+        'conta': i.conta, 
+        'digito': i.digito, 
+
+        } for i in banks]
+    return response
+
+@router.get('list_document/', tags=['Info'])
+def list_document(request):
+    documents = Documento.objects.all()
+    response = [
+        {'id': i.id, 
+        'tipo': i.tipo, 
+        'documento': i.documento, 
+
+        } for i in documents]
+    return response
