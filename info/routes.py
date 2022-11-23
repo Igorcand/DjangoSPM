@@ -69,7 +69,6 @@ def list_document(request):
         } for i in documents]
     return response
 
-
 @router.get('get_email/', tags=['Info'])
 def get_emails(request, email_id:str):
     email = get_object_or_404(Email, pessoa_email=email_id)
@@ -143,7 +142,6 @@ def update_email(request, email_id: str, requirements: EmailSchema):
     email.save()
     return {"success": True}
 
-
 @router.put('update_phone/', tags=['Info'])
 def update_phone(request, phone_id: str, requirements: PhoneSchema):
     phone = get_object_or_404(Telefone, id=phone_id)
@@ -151,7 +149,6 @@ def update_phone(request, phone_id: str, requirements: PhoneSchema):
         setattr(phone, attr, value)
     phone.save()
     return {"success": True}
-
 
 @router.put('update_address/', tags=['Info'])
 def update_address(request, address_id: str, requirements: AddressSchema):
@@ -161,7 +158,6 @@ def update_address(request, address_id: str, requirements: AddressSchema):
     address.save()
     return {"success": True}
 
-
 @router.put('update_bank/', tags=['Info'])
 def update_bank(request, bank_id: str, requirements: BankSchema):
     bank = get_object_or_404(Banco, id=bank_id)
@@ -170,11 +166,41 @@ def update_bank(request, bank_id: str, requirements: BankSchema):
     bank.save()
     return {"success": True}
 
-
 @router.put('update_document/', tags=['Info'])
 def update_document(request, document_id: str, requirements: DocumentSchema):
-    document = get_object_or_404(Email, id=document_id)
+    document = get_object_or_404(Documento, id=document_id)
     for attr, value in requirements.dict().items():
         setattr(document, attr, value)
     document.save()
     return {"success": True}
+
+@router.delete('delete_email/', tags=['Info'])
+def delete_email(request, email_id: str):
+    email = get_object_or_404(Email, id=email_id)
+    email.delete()
+    return {"success": True}
+
+@router.delete('delete_phone/', tags=['Info'])
+def delete_phone(request, phone_id: str):
+    phone = get_object_or_404(Telefone, id=phone_id)
+    phone.delete()
+    return {"success": True}
+
+@router.delete('delete_address/', tags=['Info'])
+def delete_address(request, address_id: str):
+    address = get_object_or_404(Endereco, id=address_id)
+    address.delete()
+    return {"success": True}
+
+@router.delete('delete_document/', tags=['Info'])
+def delete_document(request, document_id: str):
+    document = get_object_or_404(Documento, id=document_id)
+    document.delete()
+    return {"success": True}
+
+@router.delete('delete_bank/', tags=['Info'])
+def delete_bank(request, bank_id: str):
+    bank = get_object_or_404(Banco, id=bank_id)
+    bank.delete()
+    return {"success": True}
+
