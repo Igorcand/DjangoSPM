@@ -134,3 +134,47 @@ def create_address(request, requirements: AddressSchema):
     del requirements['pessoa_id']
     address = Endereco.objects.create(pessoa_end=person, **requirements)
     return model_to_dict(address)
+
+@router.put('update_email/', tags=['Info'])
+def update_email(request, email_id: str, requirements: EmailSchema):
+    email = get_object_or_404(Email, id=email_id)
+    for attr, value in requirements.dict().items():
+        setattr(email, attr, value)
+    email.save()
+    return {"success": True}
+
+
+@router.put('update_phone/', tags=['Info'])
+def update_phone(request, phone_id: str, requirements: PhoneSchema):
+    phone = get_object_or_404(Telefone, id=phone_id)
+    for attr, value in requirements.dict().items():
+        setattr(phone, attr, value)
+    phone.save()
+    return {"success": True}
+
+
+@router.put('update_address/', tags=['Info'])
+def update_address(request, address_id: str, requirements: AddressSchema):
+    address = get_object_or_404(Endereco, id=address_id)
+    for attr, value in requirements.dict().items():
+        setattr(address, attr, value)
+    address.save()
+    return {"success": True}
+
+
+@router.put('update_bank/', tags=['Info'])
+def update_bank(request, bank_id: str, requirements: BankSchema):
+    bank = get_object_or_404(Banco, id=bank_id)
+    for attr, value in requirements.dict().items():
+        setattr(bank, attr, value)
+    bank.save()
+    return {"success": True}
+
+
+@router.put('update_document/', tags=['Info'])
+def update_document(request, document_id: str, requirements: DocumentSchema):
+    document = get_object_or_404(Email, id=document_id)
+    for attr, value in requirements.dict().items():
+        setattr(document, attr, value)
+    document.save()
+    return {"success": True}
