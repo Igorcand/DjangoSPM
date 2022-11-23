@@ -2,6 +2,8 @@ from ninja import Router
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from .models import Email, Endereco, Telefone, Banco, Documento
+from .schema import EmailSchema,  AddressSchema, PhoneSchema, BankSchema, DocumentSchema
+from info.models import Pessoa
 
 router = Router()
 
@@ -92,3 +94,43 @@ def get_bank(request, bank_id:str):
 def get_document(request, document_id:str):
     document = get_object_or_404(Documento, pessoa_documento=document_id)
     return model_to_dict(document)
+
+@router.post('create_email/', tags=['Info'])
+def create_email(request, requirements: EmailSchema):
+    requirements = requirements.dict()
+    person = get_object_or_404(Pessoa, id=requirements['pessoa_id'])
+
+    email = Email.objects.create(pessoa_email=person, email=requirements['email'])
+    return model_to_dict(email)
+
+@router.post('create_phone/', tags=['Info'])
+def create_phone(request, requirements: PhoneSchema):
+    requirements = requirements.dict()
+    person = get_object_or_404(Pessoa, id=requirements['pessoa_id'])
+    del requirements['pessoa_id']
+    phone = Telefone.objects.create(pessoa_tel=person, **requirements)
+    return model_to_dict(phone)
+
+@router.post('create_bank/', tags=['Info'])
+def create_bank(request, requirements: BankSchema):
+    requirements = requirements.dict()
+    person = get_object_or_404(Pessoa, id=requirements['pessoa_id'])
+    del requirements['pessoa_id']
+    bank = Banco.objects.create(pessoa_banco=person, **requirements)
+    return model_to_dict(bank)
+
+@router.post('create_document/', tags=['Info'])
+def create_document(request, requirements: DocumentSchema):
+    requirements = requirements.dict()
+    person = get_object_or_404(Pessoa, id=requirements['pessoa_id'])
+    del requirements['pessoa_id']
+    document = Documento.objects.create(pessoa_documento=person, **requirements)
+    return model_to_dict(document)
+
+@router.post('create_address/', tags=['Info'])
+def create_address(request, requirements: AddressSchema):
+    requirements = requirements.dict()
+    person = get_object_or_404(Pessoa, id=requirements['pessoa_id'])
+    del requirements['pessoa_id']
+    address = Endereco.objects.create(pessoa_end=person, **requirements)
+    return model_to_dict(address)
