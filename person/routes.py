@@ -82,3 +82,15 @@ def delete_person(request, person_id: str):
     person = get_object_or_404(Pessoa, id=person_id)
     person.delete()
     return {"success": True}
+
+@router.delete('delete_physical_person/', tags=['Person'])
+def delete_physical_person(request, person_id: str):
+    person = get_object_or_404(PessoaFisica, pessoa=person_id)
+    person.delete()
+    return {"success": True}
+
+@router.delete('delete_entity_person/', tags=['Person'])
+def delete_entity_person(request, person_id: str):
+    person = get_object_or_404(PessoaJuridica, pessoa=person_id)
+    person.delete()
+    return {"success": True}
