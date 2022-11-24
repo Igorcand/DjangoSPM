@@ -146,3 +146,28 @@ def update_product(request, product_id: str, requirements: ProductSchema):
     product.save()
     return {"success": True}
 
+
+@router.delete('delete_category/', tags=['Products'])
+def delete_email(request, category_id:str):
+    category = get_object_or_404(Categoria, id=category_id)
+    category.delete()
+    return {"success": True}
+
+@router.delete('delete_brand/', tags=['Products'])
+def delete_brand(request, brand_id:str):
+    brand = get_object_or_404(Marca, id=brand_id)
+    brand.delete()
+    return {"success": True}
+
+@router.delete('delete_unit/', tags=['Products'])
+def delete_unit(request, unit_id:str):
+    unit = get_object_or_404(Unidade, id=unit_id)
+    unit.delete()
+    return {"success": True}
+
+@router.delete('delete_product/', tags=['Products'])
+def delete_product(request, product_id:str):
+    product = get_object_or_404(Produto, id=product_id)
+    product.delete()
+    return {"success": True}
+
