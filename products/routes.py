@@ -1,5 +1,7 @@
 from ninja import Router
 from .models import Categoria, Marca, Unidade, Produto
+from django.forms.models import model_to_dict
+from django.shortcuts import get_object_or_404
 
 router = Router()
 
@@ -47,3 +49,23 @@ def list_products(request):
         'inf_adicionais': i.inf_adicionais, 
         } for i in products]
     return response
+
+@router.get('get_category/', tags=['Products'])
+def get_email(request, category_id:str):
+    category = get_object_or_404(Categoria, id=category_id)
+    return model_to_dict(category)
+
+@router.get('get_brand/', tags=['Products'])
+def get_brand(request, brand_id:str):
+    brand = get_object_or_404(Marca, id=brand_id)
+    return model_to_dict(brand)
+
+@router.get('get_unit/', tags=['Products'])
+def get_unit(request, unit_id:str):
+    unit = get_object_or_404(Unidade, id=unit_id)
+    return model_to_dict(unit)
+
+@router.get('get_product/', tags=['Products'])
+def get_product(request, product_id:str):
+    product = get_object_or_404(Produto, id=product_id)
+    return model_to_dict(product)
