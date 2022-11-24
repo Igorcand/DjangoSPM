@@ -2,6 +2,7 @@ from ninja import Router
 from .models import Categoria, Marca, Unidade, Produto
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
+from .schema import *
 
 router = Router()
 
@@ -68,4 +69,33 @@ def get_unit(request, unit_id:str):
 @router.get('get_product/', tags=['Products'])
 def get_product(request, product_id:str):
     product = get_object_or_404(Produto, id=product_id)
+    return model_to_dict(product)
+
+@router.post('create_category/', tags=['Products'])
+def create_category(request, requirements: CategorySchema):
+    cat = Categoria.objects.create(**requirements.dict())
+    return model_to_dict(cat)
+
+@router.post('create_brand/', tags=['Products'])
+def create_brand(request, requirements: BrandSchema):
+    brand = Marca.objects.create(**requirements.dict())
+    return model_to_dict(brand)
+
+@router.post('create_unit/', tags=['Products'])
+def create_unit(request, requirements: UnitSchema):
+    unit = Unidade.objects.create(**requirements.dict())
+    return model_to_dict(unit)
+
+@router.post('create_product/', tags=['Products'])
+def create_product(request, requirements: ProductSchema):
+    requirements = requirements.dict()
+    brand = get_object_or_404(Marca, id=requirements['marca_id'])
+    unit = get_object_or_404(Unidade, id=requirements['unidade_id'])
+    category = get_object_or_404(Categoria, id=requirements['categoria_id'])
+
+    del requirements['categoria_id']
+    del requirements['unidade_id']
+    del requirements['marca_id']
+
+    product = Produto.objects.create(marca=brand, unidade=unit, categoria=category,**requirements)
     return model_to_dict(product)
