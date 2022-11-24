@@ -1,7 +1,9 @@
 from ninja import Router
 from .models import Compra, ItensCompra
+from .schema import *
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
+from products.models import Produto
 
 router = Router()
 
@@ -48,3 +50,59 @@ def get_shopping(request, shopping_id:str):
 def get_item_shopping(request, shopping_id:str):
     shopping = get_object_or_404(ItensCompra, id=shopping_id)
     return model_to_dict(shopping)
+
+@router.post('create_shopping/', tags=['Shopping'])
+def create_category(request, requirements: ShoppingSchema):
+    shopping = Compra.objects.create(**requirements.dict())
+    return model_to_dict(shopping)
+
+@router.post('create_item_shopping/', tags=['Shopping'])
+def create_item_shopping(request, requirements: ItensShoppingSchema):
+    requirements = requirements.dict()
+    produto = get_object_or_404(Produto, id=requirements['produto_id'])
+    requirements['produto'] = produto
+    compra = get_object_or_404(Compra, id=requirements['compra_id'])
+    requirements['compra_id'] = compra
+
+    del requirements['produto_id']
+    items_shopping = ItensCompra.objects.create(**requirements)
+    return model_to_dict(items_shopping)
+
+@router.put('update_shopping/', tags=['Shopping'])
+def update_shopping(request, shopping_id: str, requirements: ShoppingSchema):
+    shopping = get_object_or_404(Compra, id=shopping_id)
+    for attr, value in requirements.dict().items():
+        setattr(shopping, attr, value)
+    shopping.save()
+    return {"success": True}
+
+@router.put('update_item_shopping/', tags=['Shopping'])
+def update_item_shopping(request, shopping_id: str, requirements: ItensShoppingSchema):
+
+    shopping = get_object_or_404(ItensCompra, id=shopping_id)
+
+    requirements = requirements.dict()
+    produto = get_object_or_404(Produto, id=requirements['produto_id'])
+    requirements['produto'] = produto
+    compra = get_object_or_404(Compra, id=requirements['compra_id'])
+    requirements['compra_id'] = compra
+
+    del requirements['produto_id']
+
+    for attr, value in requirements.items():
+        setattr(shopping, attr, value)
+    shopping.save()
+    return {"success": True}
+
+
+@router.delete('delete_shopping/', tags=['Shopping'])
+def delete_shopping(request, shopping_id:str):
+    shopping = get_object_or_404(Compra, id=shopping_id)
+    shopping.delete()
+    return {"success": True}
+
+@router.delete('delete_item_shopping/', tags=['Shopping'])
+def delete_item_shopping(request, shopping_id:str):
+    shopping = get_object_or_404(ItensCompra, id=shopping_id)
+    shopping.delete()
+    return {"success": True}
