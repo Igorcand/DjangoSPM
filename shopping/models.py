@@ -25,7 +25,7 @@ class Compra(models.Model):
     observacoes = models.CharField(max_length=1055, null=True, blank=True)
 
     def __str__(self):
-        return f'ID:{self.id} - R${self.valor_total}'
+        return f'ID:{self.id}'
 
 
 class ItensCompra(models.Model):
@@ -45,9 +45,7 @@ class ItensCompra(models.Model):
                                    MinValueValidator(Decimal('0.00'))], null=True, blank=True)
 
     def __str__(self):
-        return self.subtotal
-
-
+        return f'{self.subtotal}'
 
 
 
