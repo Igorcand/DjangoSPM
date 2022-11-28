@@ -2,11 +2,11 @@ from ninja import NinjaAPI
 
 from django.contrib import admin
 from django.urls import path
-from person.routes import router as person_router
-from info.routes import router as info_router
-from products.routes import router as products_router
-from shopping.routes import router as shopping_router
-from payment.routes import router as payment_router
+from apps.person.routes import router as person_router
+from apps.info.routes import router as info_router
+from apps.products.routes import router as products_router
+from apps.shopping.routes import router as shopping_router
+from apps.payment.routes import router as payment_router
 
 
 

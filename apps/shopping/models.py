@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from products.models import Produto
+from apps.products.models import Produto
 
 TIPOS_DESCONTO_ESCOLHAS = (
     (u'0', u'Valor'),

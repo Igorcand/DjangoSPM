@@ -3,7 +3,7 @@ from .models import Compra, ItensCompra
 from .schema import *
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
-from products.models import Produto
+from apps.products.models import Produto
 
 router = Router()
 

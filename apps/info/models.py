@@ -1,5 +1,5 @@
 from django.db import models
-from person.models import Pessoa
+from apps.person.models import Pessoa
 
 TIPO_ENDERECO = [
     ('UNI', 'Único'),
