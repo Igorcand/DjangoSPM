@@ -71,27 +71,28 @@ def list_document(request):
 
 @router.get('get_email/', tags=['Info'])
 def get_emails(request, email_id:str):
-    email = get_object_or_404(Email, pessoa_email=email_id)
+    email = get_object_or_404(Email, id=email_id)
     return model_to_dict(email)
 
 @router.get('get_address/', tags=['Info'])
 def get_address(request, address_id:str):
-    address = get_object_or_404(Endereco, pessoa_end=address_id)
+    address = get_object_or_404(Endereco, id=address_id)
     return model_to_dict(address)
 
 @router.get('get_phones/', tags=['Info'])
 def get_phones(request, phone_id:str):
-    phone = get_object_or_404(Telefone, pessoa_tel=phone_id)
+    phone = get_object_or_404(Telefone, id=phone_id)
+    print(f'phone = {phone}')
     return model_to_dict(phone)
 
 @router.get('get_bank/', tags=['Info'])
 def get_bank(request, bank_id:str):
-    bank = get_object_or_404(Banco, pessoa_banco=bank_id)
+    bank = get_object_or_404(Banco, id=bank_id)
     return model_to_dict(bank)
 
 @router.get('get_document/', tags=['Info'])
 def get_document(request, document_id:str):
-    document = get_object_or_404(Documento, pessoa_documento=document_id)
+    document = get_object_or_404(Documento, id=document_id)
     return model_to_dict(document)
 
 @router.post('create_email/', tags=['Info'])
