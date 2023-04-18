@@ -2,7 +2,7 @@ from ninja import Router
 from .models import Pagamento
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
-from apps.shopping.models import Compra
+from apps.transactions.models import Compra
 from .schema import PaymentSchema
 
 router = Router()

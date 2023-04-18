@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from apps.shopping.models import Compra
+from apps.transactions.models import Compra
 
 class Pagamento(models.Model):
     compra_id = models.ForeignKey(

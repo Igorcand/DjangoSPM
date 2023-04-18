@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.person',
+    'apps.stock',
     'apps.info',
     'apps.products',
     'apps.shopping',
@@ -67,13 +68,17 @@ WSGI_APPLICATION = 'djangospm.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",  # set in docker-compose.yml
-        "PORT": 5432,  # default postgres port
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "postgres",
+    #     "USER": "postgres",
+    #     "PASSWORD": "postgres",
+    #     "HOST": "db",  # set in docker-compose.yml
+    #     "PORT": 5432,  # default postgres port
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

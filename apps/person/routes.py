@@ -1,5 +1,5 @@
 from ninja import Router
-from .models import Pessoa, PessoaFisica, PessoaJuridica
+from .models import Person, Physical, Juridical
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
@@ -7,90 +7,52 @@ from .schema import PersonSchema, PhysicalPersonSchema, EntityPersonSchema
 
 router = Router()
 
-@router.get('list_all_people/', tags=['Person'])
-def list_all_people(request):
-    people = Pessoa.objects.all()
-
-    response = [
-        {'id': i.id, 
-        'nome_razao_social': i.nome_razao_social, 
-        'tipo_pessoa': i.tipo_pessoa, 
-        'inscricao_municipal': i.inscricao_municipal, 
-        'informacoes_adicionais': i.informacoes_adicionais
-        } for i in people]
-    return response
-
-@router.get('list_person/', tags=['Person'])
+@router.get('person/', tags=['Person'])
 def list_person(request, person_id: str):
-    person = get_object_or_404(Pessoa, id=person_id)
+    person = get_object_or_404(Person, id=person_id)
     return model_to_dict(person)
 
-@router.get('list_physical_person_/', tags=['Person'])
+@router.get('physical_person_/', tags=['Person'])
 def list_physical_person_(request, person_id: str):
-    person = get_object_or_404(PessoaFisica, pessoa=person_id)
+    person = get_object_or_404(Physical, pessoa=person_id)
     return model_to_dict(person)
 
-@router.get('list_entity_person/', tags=['Person'])
+@router.get('juridical_person/', tags=['Person'])
 def list_entity_person(request, person_id: str):
-    person = get_object_or_404(PessoaJuridica, pessoa=person_id)
+    person = get_object_or_404(Juridical, pessoa=person_id)
     return model_to_dict(person)
 
-
-@router.post('create_person/', tags=['Person'])
+@router.post('person/', tags=['Person'])
 def create_person(request, requirements: PersonSchema):
-    person = Pessoa.objects.create(**requirements.dict())
+    person = Person.objects.create(**requirements.dict())
     return {"id": person.id}
 
-@router.post('create_physical_person/', tags=['Person'])
+@router.post('physical_person/', tags=['Person'])
 def create_physical_person(request, requirements: PhysicalPersonSchema):
     dict_requirements = requirements.dict()
-    person = PessoaFisica.objects.create(**dict_requirements)
+    person = Physical.objects.create(**dict_requirements)
     return model_to_dict(person)
 
-@router.post('create_entity_person/', tags=['Person'])
+@router.post('juridical_person/', tags=['Person'])
 def create_entity_person(request, requirements: EntityPersonSchema):
     dict_requirements = requirements.dict()
-    person = PessoaJuridica.objects.create(**dict_requirements)
+    person = Juridical.objects.create(**dict_requirements)
     return model_to_dict(person)
 
-@router.put('update_person/', tags=['Person'])
-def update_person(request, person_id: str, requirements: PersonSchema):
-    person = get_object_or_404(Pessoa, id=person_id)
-    for attr, value in requirements.dict().items():
-        setattr(person, attr, value)
-    person.save()
-    return {"success": True}
-
-@router.put('update_physical_person/', tags=['Person'])
-def update_physical_person(request, person_id: str, requirements: PhysicalPersonSchema):
-    person = get_object_or_404(PessoaFisica, pessoa=person_id)
-    for attr, value in requirements.dict().items():
-        setattr(person, attr, value)
-    person.save()
-    return {"success": True}
-
-@router.put('update_entity_person/', tags=['Person'])
-def update_entity_person(request, person_id: str, requirements: EntityPersonSchema):
-    person = get_object_or_404(PessoaJuridica, pessoa=person_id)
-    for attr, value in requirements.dict().items():
-        setattr(person, attr, value)
-    person.save()
-    return {"success": True}
-
-@router.delete('delete_person/', tags=['Person'])
+@router.delete('person/', tags=['Person'])
 def delete_person(request, person_id: str):
-    person = get_object_or_404(Pessoa, id=person_id)
+    person = get_object_or_404(Person, id=person_id)
     person.delete()
     return {"success": True}
 
-@router.delete('delete_physical_person/', tags=['Person'])
+@router.delete('physical_person/', tags=['Person'])
 def delete_physical_person(request, person_id: str):
-    person = get_object_or_404(PessoaFisica, pessoa=person_id)
+    person = get_object_or_404(Physical, pessoa=person_id)
     person.delete()
     return {"success": True}
 
-@router.delete('delete_entity_person/', tags=['Person'])
+@router.delete('juridical_person/', tags=['Person'])
 def delete_entity_person(request, person_id: str):
-    person = get_object_or_404(PessoaJuridica, pessoa=person_id)
+    person = get_object_or_404(Juridical, pessoa=person_id)
     person.delete()
     return {"success": True}

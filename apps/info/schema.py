@@ -28,10 +28,6 @@ class AddressSchema(Schema):
     logradouro: str 
     numero: str
     bairro: str 
-    complemento: str 
-    pais: str
-    cpais: str 
+    pais: str 
     municipio: str 
-    cmun: str
-    cep: str 
     uf: str
