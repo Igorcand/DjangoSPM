@@ -1,22 +1,19 @@
 from ninja import Schema
 
 class CategorySchema(Schema):
-    categoria: str 
+    category: str 
 
 class BrandSchema(Schema):
-    marca: str 
+    brand: str 
 
 class UnitSchema(Schema):
-    sigla_unidade: str 
-    unidade: str 
+    acronym: str 
+    unit: str 
 
 class ProductSchema(Schema):
-    codigo: str 
-    codigo_barras: str 
-    descricao: str 
-    categoria_id: str 
+    name: str 
+    category_id: str 
+    brand_id: str 
+    unit_id: str 
     marca_id: str 
-    unidade_id: str 
-    custo: str 
-    venda: str 
-    inf_adicionais: str 
+    add_info: str 

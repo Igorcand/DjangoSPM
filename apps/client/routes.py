@@ -1,5 +1,5 @@
 from ninja import Router
-from .models import Person, Physical, Juridical
+from .models import Client, Physical, Juridical
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
@@ -7,53 +7,53 @@ from .schema import ClientSchema, PhysicalSchema, JuridicalSchema
 
 router = Router()
 
-@router.get('person/', tags=['Person'])
-def list_person(request, person_id: str):
-    person = get_object_or_404(Person, id=person_id)
-    return model_to_dict(person)
+@router.get('client/', tags=['Client'])
+def list_client(request, client_id: str):
+    client = get_object_or_404(Client, id=client_id)
+    return model_to_dict(client)
 
-@router.get('physical_person_/', tags=['Person'])
-def list_physical_person_(request, person_id: str):
-    person = get_object_or_404(Physical, pessoa=person_id)
-    return model_to_dict(person)
+@router.get('physical/', tags=['Client'])
+def list_physical(request, client_id: str):
+    client = get_object_or_404(Physical, client=client_id)
+    return model_to_dict(client)
 
-@router.get('juridical_person/', tags=['Person'])
-def list_entity_person(request, person_id: str):
-    person = get_object_or_404(Juridical, pessoa=person_id)
-    return model_to_dict(person)
+@router.get('juridical/', tags=['Client'])
+def list_juridical(request, client_id: str):
+    client = get_object_or_404(Juridical, client=client_id)
+    return model_to_dict(client)
 
-@router.post('person/', tags=['Person'])
-def create_person(request, requirements: PhysicalSchema):
-    person = Person.create(**requirements.dict())
-    person.save()
-    return model_to_dict(person)
+@router.post('client/', tags=['Client'])
+def create(request, requirements: ClientSchema):
+    client = Client.create(**requirements.dict())
+    client.save()
+    return model_to_dict(client)
 
-@router.post('physical_person/', tags=['Person'])
-def create_physical_person(request, requirements: PhysicalSchema):
-    person = Physical.create(**requirements)
-    person.save()
-    return model_to_dict(person)
+@router.post('physical/', tags=['Client'])
+def create_physical(request, requirements: PhysicalSchema):
+    client = Physical.create(**requirements.dict())
+    client.save()
+    return model_to_dict(client)
 
-@router.post('juridical_person/', tags=['Person'])
-def create_entity_person(request, requirements: JuridicalSchema):
-    person = Juridical.create(**requirements)
-    person.save()
-    return model_to_dict(person)
+@router.post('juridical/', tags=['Client'])
+def create_juridical(request, requirements: JuridicalSchema):
+    client = Juridical.create(**requirements.dict())
+    client.save()
+    return model_to_dict(client)
 
-@router.delete('person/', tags=['Person'])
-def delete_person(request, person_id: str):
-    person = get_object_or_404(Person, id=person_id)
-    person.delete()
+@router.delete('client/', tags=['Client'])
+def delete_client(request, client_id: str):
+    client = get_object_or_404(Client, id=client_id)
+    client.delete()
     return {"success": True}
 
-@router.delete('physical_person/', tags=['Person'])
-def delete_physical_person(request, person_id: str):
-    person = get_object_or_404(Physical, pessoa=person_id)
-    person.delete()
+@router.delete('physical/', tags=['Client'])
+def delete_physical(request, client_id: str):
+    client = get_object_or_404(Physical, client=client_id)
+    client.delete()
     return {"success": True}
 
-@router.delete('juridical_person/', tags=['Person'])
-def delete_entity_person(request, person_id: str):
-    person = get_object_or_404(Juridical, pessoa=person_id)
-    person.delete()
+@router.delete('juridical/', tags=['Client'])
+def delete_juridical(request, client_id: str):
+    client = get_object_or_404(Juridical, client=client_id)
+    client.delete()
     return {"success": True}

@@ -3,7 +3,6 @@ from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from .models import Email, Address, Phone, Bank, Document
 from .schema import EmailSchema,  AddressSchema, PhoneSchema, BankSchema, DocumentSchema
-from apps.info.models import Person
 
 router = Router()
 
