@@ -15,5 +15,4 @@ class ProductSchema(Schema):
     category_id: str 
     brand_id: str 
     unit_id: str 
-    marca_id: str 
     add_info: str 

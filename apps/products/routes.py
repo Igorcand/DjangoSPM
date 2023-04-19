@@ -11,17 +11,17 @@ def list_categories(request):
     cats = Category.objects.all()
     response = [
         {'id': i.id, 
-        'cat': i.categoria, 
+        'cat': i.category, 
         } for i in cats]
     return response
 
 @router.get('list_brands/', tags=['Products'])
 def list_brands(request):
-    marcas = Brand.objects.all()
+    brands = Brand.objects.all()
     response = [
         {'id': i.id, 
-        'marca': i.marca, 
-        } for i in marcas]
+        'marca': i.brand, 
+        } for i in brands]
     return response
 
 @router.get('list_units/', tags=['Products'])
@@ -29,8 +29,8 @@ def list_units(request):
     units = Unit.objects.all()
     response = [
         {'id': i.id, 
-        'sigla_unidade': i.sigla_unidade, 
-        'unidade': i.unidade, 
+        'acronym': i.acronym, 
+        'unit': i.unit, 
         } for i in units]
     return response
 
@@ -39,15 +39,11 @@ def list_products(request):
     products = Product.objects.all()
     response = [
         {'id': i.id, 
-        'codigo': i.codigo, 
-        'codigo_barras': i.codigo_barras, 
-        'descricao': i.descricao, 
-        'categoria': i.categoria.categoria, 
-        'marca': i.marca.marca, 
-        'unidade': i.unidade.unidade, 
-        'custo': i.custo, 
-        'venda': i.venda, 
-        'inf_adicionais': i.inf_adicionais, 
+        'name': i.name, 
+        'category': i.category.category, 
+        'brand': i.brand.brand, 
+        'unit': i.unit.unit, 
+        'stock': i.stock, 
         } for i in products]
     return response
 
@@ -88,59 +84,13 @@ def create_unit(request, requirements: UnitSchema):
 
 @router.post('create_product/', tags=['Products'])
 def create_product(request, requirements: ProductSchema):
-    requirements = requirements.dict()
-    brand = get_object_or_404(Brand, id=requirements['marca_id'])
-    unit = get_object_or_404(Unit, id=requirements['unidade_id'])
-    category = get_object_or_404(Category, id=requirements['categoria_id'])
-
-    del requirements['categoria_id']
-    del requirements['unidade_id']
-    del requirements['marca_id']
-
-    product = Product.objects.create(marca=brand, unidade=unit, categoria=category,**requirements)
+    product = Product.objects.create(**requirements.dict())
     return model_to_dict(product)
-
-@router.put('update_category/', tags=['Products'])
-def update_category(request, category_id: str, requirements: CategorySchema):
-    cat = get_object_or_404(Category, id=category_id)
-    for attr, value in requirements.dict().items():
-        setattr(cat, attr, value)
-    cat.save()
-    return {"success": True}
-
-@router.put('update_brand/', tags=['Products'])
-def update_brand(request, brand_id: str, requirements: BrandSchema):
-    brand = get_object_or_404(Category, id=brand_id)
-    for attr, value in requirements.dict().items():
-        setattr(brand, attr, value)
-    brand.save()
-    return {"success": True}
-
-@router.put('update_unit/', tags=['Products'])
-def update_unit(request, unit_id: str, requirements: UnitSchema):
-    unit = get_object_or_404(Category, id=unit_id)
-    for attr, value in requirements.dict().items():
-        setattr(unit, attr, value)
-    unit.save()
-    return {"success": True}
 
 @router.put('update_product/', tags=['Products'])
 def update_product(request, product_id: str, requirements: ProductSchema):
-
     product = get_object_or_404(Product, id=product_id)
-
     requirements = requirements.dict()
-    brand = get_object_or_404(Brand, id=requirements['marca_id'])
-    requirements['marca'] = brand
-    unit = get_object_or_404(Unit, id=requirements['unidade_id'])
-    requirements['unidade'] = unit
-    category = get_object_or_404(Category, id=requirements['categoria_id'])
-    requirements['categoria'] = category
-
-    del requirements['categoria_id']
-    del requirements['unidade_id']
-    del requirements['marca_id']
-
     for attr, value in requirements.items():
         setattr(product, attr, value)
     product.save()
