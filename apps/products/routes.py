@@ -1,5 +1,5 @@
 from ninja import Router
-from .models import Categoria, Marca, Unidade, Produto
+from .models import Category, Brand, Unit, Product
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from .schema import *
@@ -8,7 +8,7 @@ router = Router()
 
 @router.get('list_categories/', tags=['Products'])
 def list_categories(request):
-    cats = Categoria.objects.all()
+    cats = Category.objects.all()
     response = [
         {'id': i.id, 
         'cat': i.categoria, 
@@ -17,7 +17,7 @@ def list_categories(request):
 
 @router.get('list_brands/', tags=['Products'])
 def list_brands(request):
-    marcas = Marca.objects.all()
+    marcas = Brand.objects.all()
     response = [
         {'id': i.id, 
         'marca': i.marca, 
@@ -26,7 +26,7 @@ def list_brands(request):
 
 @router.get('list_units/', tags=['Products'])
 def list_units(request):
-    units = Unidade.objects.all()
+    units = Unit.objects.all()
     response = [
         {'id': i.id, 
         'sigla_unidade': i.sigla_unidade, 
@@ -36,7 +36,7 @@ def list_units(request):
 
 @router.get('list_products/', tags=['Products'])
 def list_products(request):
-    products = Produto.objects.all()
+    products = Product.objects.all()
     response = [
         {'id': i.id, 
         'codigo': i.codigo, 
@@ -53,56 +53,56 @@ def list_products(request):
 
 @router.get('get_category/', tags=['Products'])
 def get_email(request, category_id:str):
-    category = get_object_or_404(Categoria, id=category_id)
+    category = get_object_or_404(Category, id=category_id)
     return model_to_dict(category)
 
 @router.get('get_brand/', tags=['Products'])
 def get_brand(request, brand_id:str):
-    brand = get_object_or_404(Marca, id=brand_id)
+    brand = get_object_or_404(Brand, id=brand_id)
     return model_to_dict(brand)
 
 @router.get('get_unit/', tags=['Products'])
 def get_unit(request, unit_id:str):
-    unit = get_object_or_404(Unidade, id=unit_id)
+    unit = get_object_or_404(Unit, id=unit_id)
     return model_to_dict(unit)
 
 @router.get('get_product/', tags=['Products'])
 def get_product(request, product_id:str):
-    product = get_object_or_404(Produto, id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     return model_to_dict(product)
 
 @router.post('create_category/', tags=['Products'])
 def create_category(request, requirements: CategorySchema):
-    cat = Categoria.objects.create(**requirements.dict())
+    cat = Category.objects.create(**requirements.dict())
     return model_to_dict(cat)
 
 @router.post('create_brand/', tags=['Products'])
 def create_brand(request, requirements: BrandSchema):
-    brand = Marca.objects.create(**requirements.dict())
+    brand = Brand.objects.create(**requirements.dict())
     return model_to_dict(brand)
 
 @router.post('create_unit/', tags=['Products'])
 def create_unit(request, requirements: UnitSchema):
-    unit = Unidade.objects.create(**requirements.dict())
+    unit = Unit.objects.create(**requirements.dict())
     return model_to_dict(unit)
 
 @router.post('create_product/', tags=['Products'])
 def create_product(request, requirements: ProductSchema):
     requirements = requirements.dict()
-    brand = get_object_or_404(Marca, id=requirements['marca_id'])
-    unit = get_object_or_404(Unidade, id=requirements['unidade_id'])
-    category = get_object_or_404(Categoria, id=requirements['categoria_id'])
+    brand = get_object_or_404(Brand, id=requirements['marca_id'])
+    unit = get_object_or_404(Unit, id=requirements['unidade_id'])
+    category = get_object_or_404(Category, id=requirements['categoria_id'])
 
     del requirements['categoria_id']
     del requirements['unidade_id']
     del requirements['marca_id']
 
-    product = Produto.objects.create(marca=brand, unidade=unit, categoria=category,**requirements)
+    product = Product.objects.create(marca=brand, unidade=unit, categoria=category,**requirements)
     return model_to_dict(product)
 
 @router.put('update_category/', tags=['Products'])
 def update_category(request, category_id: str, requirements: CategorySchema):
-    cat = get_object_or_404(Categoria, id=category_id)
+    cat = get_object_or_404(Category, id=category_id)
     for attr, value in requirements.dict().items():
         setattr(cat, attr, value)
     cat.save()
@@ -110,7 +110,7 @@ def update_category(request, category_id: str, requirements: CategorySchema):
 
 @router.put('update_brand/', tags=['Products'])
 def update_brand(request, brand_id: str, requirements: BrandSchema):
-    brand = get_object_or_404(Categoria, id=brand_id)
+    brand = get_object_or_404(Category, id=brand_id)
     for attr, value in requirements.dict().items():
         setattr(brand, attr, value)
     brand.save()
@@ -118,7 +118,7 @@ def update_brand(request, brand_id: str, requirements: BrandSchema):
 
 @router.put('update_unit/', tags=['Products'])
 def update_unit(request, unit_id: str, requirements: UnitSchema):
-    unit = get_object_or_404(Categoria, id=unit_id)
+    unit = get_object_or_404(Category, id=unit_id)
     for attr, value in requirements.dict().items():
         setattr(unit, attr, value)
     unit.save()
@@ -127,14 +127,14 @@ def update_unit(request, unit_id: str, requirements: UnitSchema):
 @router.put('update_product/', tags=['Products'])
 def update_product(request, product_id: str, requirements: ProductSchema):
 
-    product = get_object_or_404(Produto, id=product_id)
+    product = get_object_or_404(Product, id=product_id)
 
     requirements = requirements.dict()
-    brand = get_object_or_404(Marca, id=requirements['marca_id'])
+    brand = get_object_or_404(Brand, id=requirements['marca_id'])
     requirements['marca'] = brand
-    unit = get_object_or_404(Unidade, id=requirements['unidade_id'])
+    unit = get_object_or_404(Unit, id=requirements['unidade_id'])
     requirements['unidade'] = unit
-    category = get_object_or_404(Categoria, id=requirements['categoria_id'])
+    category = get_object_or_404(Category, id=requirements['categoria_id'])
     requirements['categoria'] = category
 
     del requirements['categoria_id']
@@ -149,25 +149,25 @@ def update_product(request, product_id: str, requirements: ProductSchema):
 
 @router.delete('delete_category/', tags=['Products'])
 def delete_email(request, category_id:str):
-    category = get_object_or_404(Categoria, id=category_id)
+    category = get_object_or_404(Category, id=category_id)
     category.delete()
     return {"success": True}
 
 @router.delete('delete_brand/', tags=['Products'])
 def delete_brand(request, brand_id:str):
-    brand = get_object_or_404(Marca, id=brand_id)
+    brand = get_object_or_404(Brand, id=brand_id)
     brand.delete()
     return {"success": True}
 
 @router.delete('delete_unit/', tags=['Products'])
 def delete_unit(request, unit_id:str):
-    unit = get_object_or_404(Unidade, id=unit_id)
+    unit = get_object_or_404(Unit, id=unit_id)
     unit.delete()
     return {"success": True}
 
 @router.delete('delete_product/', tags=['Products'])
 def delete_product(request, product_id:str):
-    product = get_object_or_404(Produto, id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     product.delete()
     return {"success": True}
 

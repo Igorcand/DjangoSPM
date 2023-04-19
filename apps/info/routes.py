@@ -20,7 +20,6 @@ def get_address(request, address_id:str):
 @router.get('phone/', tags=['Info'])
 def get_phones(request, phone_id:str):
     phone = get_object_or_404(Phone, id=phone_id)
-    print(f'phone = {phone}')
     return model_to_dict(phone)
 
 @router.get('bank/', tags=['Info'])
@@ -35,67 +34,28 @@ def get_document(request, document_id:str):
 
 @router.post('email/', tags=['Info'])
 def create_email(request, requirements: EmailSchema):
-    requirements = requirements.dict()
-    person = get_object_or_404(Person, id=requirements['pessoa_id'])
-
-    email = Email.objects.create(pessoa_email=person, email=requirements['email'])
+    email = Email.objects.create(**requirements.dict())
     return model_to_dict(email)
 
 @router.post('phone/', tags=['Info'])
 def create_phone(request, requirements: PhoneSchema):
-    requirements = requirements.dict()
-    person = get_object_or_404(Person, id=requirements['pessoa_id'])
-    del requirements['pessoa_id']
-    phone = Phone.objects.create(pessoa_tel=person, **requirements)
+    phone = Phone.objects.create(**requirements.dict())
     return model_to_dict(phone)
 
 @router.post('bank/', tags=['Info'])
 def create_bank(request, requirements: BankSchema):
-    requirements = requirements.dict()
-    person = get_object_or_404(Person, id=requirements['pessoa_id'])
-    del requirements['pessoa_id']
-    bank = Bank.objects.create(pessoa_banco=person, **requirements)
+    bank = Bank.objects.create(**requirements.dict())
     return model_to_dict(bank)
 
 @router.post('document/', tags=['Info'])
 def create_document(request, requirements: DocumentSchema):
-    requirements = requirements.dict()
-    person = get_object_or_404(Person, id=requirements['pessoa_id'])
-    del requirements['pessoa_id']
-    document = Document.objects.create(pessoa_documento=person, **requirements)
+    document = Document.objects.create(**requirements.dict())
     return model_to_dict(document)
 
 @router.post('address/', tags=['Info'])
 def create_address(request, requirements: AddressSchema):
-    requirements = requirements.dict()
-    person = get_object_or_404(Person, id=requirements['pessoa_id'])
-    del requirements['pessoa_id']
-    address = Address.objects.create(pessoa_end=person, **requirements)
+    address = Address.objects.create(**requirements.dict())
     return model_to_dict(address)
-
-@router.put('email/', tags=['Info'])
-def update_email(request, email_id: str, requirements: EmailSchema):
-    email = get_object_or_404(Email, id=email_id)
-    for attr, value in requirements.dict().items():
-        setattr(email, attr, value)
-    email.save()
-    return {"success": True}
-
-@router.put('phone/', tags=['Info'])
-def update_phone(request, phone_id: str, requirements: PhoneSchema):
-    phone = get_object_or_404(Phone, id=phone_id)
-    for attr, value in requirements.dict().items():
-        setattr(phone, attr, value)
-    phone.save()
-    return {"success": True}
-
-@router.put('address/', tags=['Info'])
-def update_address(request, address_id: str, requirements: AddressSchema):
-    address = get_object_or_404(Address, id=address_id)
-    for attr, value in requirements.dict().items():
-        setattr(address, attr, value)
-    address.save()
-    return {"success": True}
 
 @router.delete('email/', tags=['Info'])
 def delete_email(request, email_id: str):

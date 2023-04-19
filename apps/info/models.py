@@ -1,5 +1,5 @@
 from django.db import models
-from apps.person.models import Person
+from apps.client.models import Client
 
 TIPO_ENDERECO = [
     ('UNI', 'Único'),
@@ -215,51 +215,45 @@ BANCOS = [
 
 
 class Address(models.Model):
-    pessoa_end = models.ForeignKey(Person, on_delete=models.CASCADE)
-    tipo_endereco = models.CharField(max_length=3, null=True, blank=True, choices=TIPO_ENDERECO)
-    logradouro = models.CharField(max_length=255, null=True, blank=True)
-    numero = models.CharField(max_length=16, null=True, blank=True)
-    bairro = models.CharField(max_length=64, null=True, blank=True)
-    pais = models.CharField(max_length=32, null=True,blank=True, default='Brasil')
-    municipio = models.CharField(max_length=64, null=True, blank=True)
-    uf = models.CharField(max_length=3, null=True, blank=True, choices=UF_SIGLA)
+    pessoa = models.ForeignKey(Client, on_delete=models.CASCADE)
+    tipo_endereco = models.CharField(max_length=3, choices=TIPO_ENDERECO)
+    logradouro = models.CharField(max_length=255)
+    numero = models.CharField(max_length=16)
+    bairro = models.CharField(max_length=64)
+    pais = models.CharField(max_length=32, default='Brasil')
+    municipio = models.CharField(max_length=64)
+    uf = models.CharField(max_length=3, choices=UF_SIGLA)
 
     def __str__(self):
         return f'{self.logradouro}, {self.numero}, {self.bairro}, {self.municipio}'
 
 class Phone(models.Model):
-    pessoa_tel = models.ForeignKey(
-        Person, on_delete=models.CASCADE)
-    tipo_telefone = models.CharField(
-        max_length=8, choices=TIPO_TELEFONE, null=True, blank=True)
+    pessoa = models.ForeignKey(Client, on_delete=models.CASCADE)
+    tipo_telefone = models.CharField(max_length=8, choices=TIPO_TELEFONE)
     telefone = models.CharField(max_length=32)
 
     def __str__(self):
         return self.telefone
 
 class Email(models.Model):
-    pessoa_email = models.ForeignKey(
-        Person, on_delete=models.CASCADE)
+    pessoa = models.ForeignKey(Client, on_delete=models.CASCADE)
     email = models.CharField(max_length=255)
 
     def __str__(self):
         return self.email
 
 class Bank(models.Model):
-    pessoa_banco = models.ForeignKey(
-        Person, on_delete=models.CASCADE)
-    banco = models.CharField(
-        max_length=3, choices=BANCOS, null=True, blank=True)
-    agencia = models.CharField(max_length=8, null=True, blank=True)
-    conta = models.CharField(max_length=32, null=True, blank=True)
-    digito = models.CharField(max_length=8, null=True, blank=True)
+    pessoa = models.ForeignKey(Client, on_delete=models.CASCADE)
+    banco = models.CharField(max_length=3, choices=BANCOS)
+    agencia = models.CharField(max_length=8)
+    conta = models.CharField(max_length=32)
+    digito = models.CharField(max_length=8)
 
     def __str__(self):
         return f'{self.banco} - Ag: {self.agencia}-{self.digito}'
 
 class Document(models.Model):
-    pessoa_documento = models.ForeignKey(
-        Person, on_delete=models.CASCADE)
+    pessoa = models.ForeignKey(Client, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=32)
     documento = models.CharField(max_length=255)
 

@@ -3,7 +3,7 @@ from .models import Person, Physical, Juridical
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from .schema import PersonSchema, PhysicalPersonSchema, EntityPersonSchema
+from .schema import ClientSchema, PhysicalSchema, JuridicalSchema
 
 router = Router()
 
@@ -23,20 +23,21 @@ def list_entity_person(request, person_id: str):
     return model_to_dict(person)
 
 @router.post('person/', tags=['Person'])
-def create_person(request, requirements: PersonSchema):
-    person = Person.objects.create(**requirements.dict())
-    return {"id": person.id}
+def create_person(request, requirements: PhysicalSchema):
+    person = Person.create(**requirements.dict())
+    person.save()
+    return model_to_dict(person)
 
 @router.post('physical_person/', tags=['Person'])
-def create_physical_person(request, requirements: PhysicalPersonSchema):
-    dict_requirements = requirements.dict()
-    person = Physical.objects.create(**dict_requirements)
+def create_physical_person(request, requirements: PhysicalSchema):
+    person = Physical.create(**requirements)
+    person.save()
     return model_to_dict(person)
 
 @router.post('juridical_person/', tags=['Person'])
-def create_entity_person(request, requirements: EntityPersonSchema):
-    dict_requirements = requirements.dict()
-    person = Juridical.objects.create(**dict_requirements)
+def create_entity_person(request, requirements: JuridicalSchema):
+    person = Juridical.create(**requirements)
+    person.save()
     return model_to_dict(person)
 
 @router.delete('person/', tags=['Person'])
